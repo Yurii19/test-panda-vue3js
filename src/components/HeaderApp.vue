@@ -3,10 +3,10 @@
     <div class="menu-nav">
       <ul class="nav-list">
         <li>
-          <a href="#">Main</a>
+            <router-link to="/">Main</router-link>
         </li>
         <li>
-          <a href="#">Selected</a>
+            <router-link to="/chosen">Chosen</router-link>
         </li>
       </ul>
     </div>
