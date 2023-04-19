@@ -1,16 +1,70 @@
 <template lang="html">
-    <div class="card">
-      
-    </div>
-  </template>
-  
-  <script>
-  //import { Options, Vue } from "vue-class-component";
-  // @Options({})
-  export default {};
-  </script>
-  
-  <style scoped>
-  
-  </style>
-  
+  <div class="card">
+    <h3>City: {{ params.city_name }}</h3>
+    <ul>
+      <li>
+        <span><b>Temperature:</b> </span
+        ><span>{{ params.temp }}&nbsp;&#8451;</span>
+      </li>
+      <hr />
+      <li>
+        <span><b>Feels like:</b></span
+        ><span> {{ params.feels_like }}&nbsp;&#8451;</span>
+      </li>
+      <hr />
+      <li>
+        <span><b>Humidity:</b></span
+        ><span>{{ params.humidity }}&nbsp;&#8453;</span>
+      </li>
+      <hr />
+      <li>
+        <span><b>Pressure:</b></span
+        ><span>{{ params.pressure }}&nbsp;&#13169;</span>
+      </li>
+      <hr />
+      <li>
+        <span><b>Temp max:</b></span
+        ><span>{{ params.temp_max }}&nbsp;&#8451;</span>
+      </li>
+      <hr />
+      <li>
+        <span><b>Temp min:</b></span
+        ><span>{{ params.temp_min }}&nbsp;&#8451;</span>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+import { defineProps } from "vue";
+const props = defineProps({
+  params: {
+    city_name: String,
+    feels_like: String,
+    humidity: String,
+    pressure: String,
+    temp: String,
+    temp_max: String,
+    temp_min: String,
+  },
+});
+</script>
+
+<style scoped>
+.card {
+  width: 300px;
+  padding: 10px 20px 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 7px black;
+  text-align: start;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0 5px 0;
+}
+</style>

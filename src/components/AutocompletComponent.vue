@@ -54,7 +54,7 @@ function inputHandle() {
 
 function getWeather() {
   const cityName = "London";
-  const url = `${API_URL}?q=${cityName}&appid=${APP_ID}`;
+  const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
   getWeatherAtCity(url)
     .then((resp) => resp.json())
     .then((data) => console.log(data));
