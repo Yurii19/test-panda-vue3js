@@ -1,7 +1,12 @@
 <template lang="html">
   <div class="box">
-    <input type="text" v-model="cityModel" @input="inputHandle()"  ref="searchCity"/>
-    <button @click="addCity()">add city</button>
+    <input
+      type="text"
+      v-model="cityModel"
+      @input="inputHandle()"
+      ref="searchCity"
+    />
+    <button @click="getWeather()">add city</button>
 
     <div class="select">
       <ul>
@@ -16,48 +21,44 @@
         </li>
       </ul>
     </div>
-
-    <!-- <select name="cars" id="cars">
-      <input type="text" />
-      <option v-for="city in cities" :value="city" :key="city">
-        {{ city }}
-      </option>
-    </select> -->
   </div>
 </template>
 
 <script setup>
 import { ref, watch } from "vue";
+import { getWeatherAtCity } from "../services/services";
+import { APP_ID, API_URL } from "../variables";
+// import { json } from "body-parser";
 
- let cityModel = ref( "");
+let cityModel = ref("");
 const cities = ref(["Kyiv", "Warszaw", "Berlin", "Paris"]);
 const matchedCities = ref([]);
 
-function selectCity(event){
-    //  cityModel = ''
-    const theCity = event.target.getAttribute('data-value')
-     cityModel.value = theCity;
-//  city.value = theCity
-     console.log(cityModel)
+function selectCity(event) {
+  const theCity = event.target.getAttribute("data-value");
+  cityModel.value = theCity;
+  console.log(cityModel);
 }
 
-watch('cityModel',(nv)=>{
-    console.log(nv)
-})
+watch("cityModel", (nv) => {
+  console.log(nv);
+});
 function inputHandle() {
   if (cityModel.value === "") {
     matchedCities.value = [];
-    return
+    return;
   }
   matchedCities.value = cities.value.filter((el) => el.match(cityModel.value));
   console.log(cityModel);
 }
 
-function addCity() {
-//   cities.value = [...cities.value, cityModel];
-//   cityModel = "";
+function getWeather() {
+  const cityName = "London";
+  const url = `${API_URL}?q=${cityName}&appid=${APP_ID}`;
+  getWeatherAtCity(url)
+    .then((resp) => resp.json())
+    .then((data) => console.log(data));
 }
-
 </script>
 
 <style scoped>
