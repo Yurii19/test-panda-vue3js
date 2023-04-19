@@ -30,5 +30,6 @@ const cards = [
 }
 .controls {
   background-color: aquamarine;
+  padding: 15px;
 }
 </style>
