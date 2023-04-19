@@ -11,7 +11,6 @@ export default{}
 </script>
  
 <style scoped >
-#app{
-    border: 1px solid red;
-}
+/* .home {
+} */
 </style>
