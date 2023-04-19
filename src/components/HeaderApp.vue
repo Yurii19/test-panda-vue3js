@@ -6,7 +6,7 @@
             <router-link to="/">Main</router-link>
         </li>
         <li>
-            <router-link to="/chosen">Chosen</router-link>
+            <router-link to="/favorites">Favorites</router-link>
         </li>
       </ul>
     </div>

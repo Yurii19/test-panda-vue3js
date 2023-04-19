@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="box">
+    <label for="city">Start typing to find city</label>
     <input
+    id="city"
       type="text"
       v-model="cityModel"
       @input="inputHandle()"
@@ -66,6 +68,7 @@ function getWeather() {
   padding: 0;
   border: 1px dotted red;
   width: 200px;
+  margin-bottom: 10px;
 }
 .list-item:hover {
   cursor: pointer;
