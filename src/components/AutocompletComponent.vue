@@ -50,7 +50,6 @@ function selectCity(event) {
 }
 
 function inputHandle() {
-  console.log(cityModel.value);
   if (cityModel.value === "") {
     matchedCities.value = [];
     return;

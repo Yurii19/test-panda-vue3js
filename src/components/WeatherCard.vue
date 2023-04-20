@@ -32,11 +32,20 @@
         ><span>{{ params.temp_min }}&nbsp;&#8451;</span>
       </li>
     </ul>
+    <div class="controls">
+      <span class="icon-container" @click="addToFavorite()"><FavoriteIcon /></span>
+      <span class="icon-container"> <DeleteIcon /></span>
+      <span class="icon-container"><ChartIcon /></span>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
+import FavoriteIcon from "@/icons/FavoriteIcon.vue";
+import DeleteIcon from "@/icons/DeleteIcon.vue";
+//import DeleteIcon from "@/icons/DeleteIcon.vue";
+import ChartIcon from "@/icons/ChartIcon.vue";
 const props = defineProps({
   params: {
     city_name: String,
@@ -48,6 +57,11 @@ const props = defineProps({
     temp_min: String,
   },
 });
+const emit = defineEmits(["deleteCard", "addToFavorit", "showChart"]);
+
+function addToFavorite(){
+  emit('addToFavorit', { cityName: props.city_name })
+}
 </script>
 
 <style scoped>
@@ -57,6 +71,14 @@ const props = defineProps({
   border-radius: 5px;
   box-shadow: 0 0 7px black;
   text-align: start;
+}
+.controls {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-around;
+}
+.icon-container {
+  cursor: pointer;
 }
 ul {
   list-style-type: none;
