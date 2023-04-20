@@ -15,11 +15,11 @@
         <li
           class="list-item"
           v-for="city in matchedCities"
-          :data-value="city"
-          :key="city"
+          :data-value="city.name"
+          :key="city.id"
           @click="selectCity($event)"
         >
-          {{ city }}
+          {{ city.name }}
         </li>
       </ul>
     </div>
@@ -27,21 +27,34 @@
 </template>
 
 <script setup>
-import { ref, watch, defineEmits } from "vue";
+import { ref, watch, defineEmits, onMounted } from "vue";
 import { getWeatherAtCity } from "../services/services";
 import { APP_ID, API_URL } from "../variables";
+import cityData from "../assets/city.list.json";
 // import { json } from "body-parser";
 
 let cityModel = ref("");
-const cities = ref(["Kyiv", "Warszaw", "Berlin", "Paris"]);
+const cities = ref([{ name: "Kyiv", id: 0 }]);
 const matchedCities = ref([]);
 
 const emit = defineEmits(["selectCity"]);
 
-// function onSelectCity(params) {
-//     emit('eventA')
-//     emit('eventB', params)
-// }
+onMounted(() => {
+  console.log("onMounted > ", cityData[0]);
+  cities.value = cityData;
+  // fetch('/city.list.json')
+  //.then(d => console.log(d.json()))
+  // .then(r => r.blob())
+  // .then(bl =>{
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     const data = JSON.parse(reader.result);
+  //     // do something with the data
+  //     console.log(data)
+  //   };
+  //   reader.readAsText(bl)
+  // })
+});
 
 function selectCity(event) {
   const theCity = event.target.getAttribute("data-value");
@@ -50,24 +63,18 @@ function selectCity(event) {
   emit("selectCity", { cityName: cityModel.value });
 }
 
-
 function inputHandle() {
+  console.log(cityModel.value);
   if (cityModel.value === "") {
     matchedCities.value = [];
     return;
   }
-  matchedCities.value = cities.value.filter((el) =>
-    el.toLocaleLowerCase().match(cityModel.value.toLowerCase())
-  );
+  matchedCities.value = cities.value.filter((el) => {
+    const patern = `/${cityModel.value.toLowerCase()}/`;
+    const pat = new RegExp('^'+ cityModel.value.toLowerCase())
+    return el.name.toLocaleLowerCase().match(pat);
+  });
 }
-
-// function getWeather() {
-//   const cityName = "London";
-//   const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
-//   getWeatherAtCity(url)
-//     .then((resp) => resp.json())
-//     .then((data) => console.log(data));
-// }
 </script>
 
 <style scoped>
@@ -95,6 +102,8 @@ function inputHandle() {
   background-color: #dcdde1;
   margin: 0;
   padding: 10px 0 0 0;
+  max-height: 50vh;
+  overflow-y: scroll;
   /* top: 0;
   right: 0; */
   /* background-color: greenyellow; */

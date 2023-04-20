@@ -13,6 +13,7 @@
 import AutocompletComponent from "@/components/AutocompletComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
 import { getLocations } from "@/services/services";
+import { onMounted } from "vue";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
 const cards = [
   {
@@ -26,14 +27,24 @@ const cards = [
   },
 ];
 
+
+
 function addFavorite() {
   console.log("addFavorite");
-  getLocations().then(r => console.log('getLocations> ', r))
+  getLocations().then((r) => console.log("getLocations> ", r));
 }
 
 function onCitySelect(event) {
   console.log("onCitySelect > ", event);
 }
+
+// function getWeather() {
+//   const cityName = "London";
+//   const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
+//   getWeatherAtCity(url)
+//     .then((resp) => resp.json())
+//     .then((data) => console.log(data));
+// }
 </script>
 
 <style scoped>
