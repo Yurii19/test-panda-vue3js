@@ -1,7 +1,8 @@
 <template lang="html">
   <div class="main">
-    <section class="controls"><AutocompletComponent @select-city="onCitySelect($event)" />
-    <button>Add to favorite</button>
+    <section class="controls">
+      <AutocompletComponent @select-city="onCitySelect($event)" />
+      <button @click="addFavorite()">Add to favorite</button>
     </section>
 
     <WeatherCard :params="cards[0]" />
@@ -11,6 +12,7 @@
 <script setup>
 import AutocompletComponent from "@/components/AutocompletComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
+import { getLocations } from "@/services/services";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
 const cards = [
   {
@@ -24,9 +26,14 @@ const cards = [
   },
 ];
 
-function onCitySelect(event){
-    console.log('onCitySelect > ',event)
-  }
+function addFavorite() {
+  console.log("addFavorite");
+  getLocations().then(r => console.log('getLocations> ', r))
+}
+
+function onCitySelect(event) {
+  console.log("onCitySelect > ", event);
+}
 </script>
 
 <style scoped>
@@ -38,11 +45,11 @@ function onCitySelect(event){
   background-color: aquamarine;
   padding: 15px;
 }
-button{
-    padding: 10px;
-    font-size: 1.1em;
-    border-radius: 5px ;
-    cursor: pointer;
-    border-style: none;
+button {
+  padding: 10px;
+  font-size: 1.1em;
+  border-radius: 5px;
+  cursor: pointer;
+  border-style: none;
 }
 </style>
