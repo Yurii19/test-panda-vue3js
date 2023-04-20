@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, defineEmits } from "vue";
 import { getWeatherAtCity } from "../services/services";
 import { APP_ID, API_URL } from "../variables";
 // import { json } from "body-parser";
@@ -36,32 +36,38 @@ let cityModel = ref("");
 const cities = ref(["Kyiv", "Warszaw", "Berlin", "Paris"]);
 const matchedCities = ref([]);
 
+const emit = defineEmits(["selectCity"]);
+
+// function onSelectCity(params) {
+//     emit('eventA')
+//     emit('eventB', params)
+// }
+
 function selectCity(event) {
   const theCity = event.target.getAttribute("data-value");
   cityModel.value = theCity;
   matchedCities.value = [];
-  console.log(cityModel);
+  emit("selectCity", { cityName: cityModel.value });
 }
 
-watch("cityModel", (nv) => {
-  console.log(nv);
-});
+
 function inputHandle() {
   if (cityModel.value === "") {
     matchedCities.value = [];
     return;
   }
-  matchedCities.value = cities.value.filter((el) => el.match(cityModel.value));
-  console.log(cityModel);
+  matchedCities.value = cities.value.filter((el) =>
+    el.toLocaleLowerCase().match(cityModel.value.toLowerCase())
+  );
 }
 
-function getWeather() {
-  const cityName = "London";
-  const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
-  getWeatherAtCity(url)
-    .then((resp) => resp.json())
-    .then((data) => console.log(data));
-}
+// function getWeather() {
+//   const cityName = "London";
+//   const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
+//   getWeatherAtCity(url)
+//     .then((resp) => resp.json())
+//     .then((data) => console.log(data));
+// }
 </script>
 
 <style scoped>

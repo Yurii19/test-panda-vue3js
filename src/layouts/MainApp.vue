@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="main">
-    <section class="controls"><AutocompletComponent /></section>
+    <section class="controls"><AutocompletComponent @select-city="onCitySelect($event)" />
+    <button>Add to favorite</button>
+    </section>
 
     <WeatherCard :params="cards[0]" />
   </div>
@@ -21,6 +23,10 @@ const cards = [
     temp_min: "10.95",
   },
 ];
+
+function onCitySelect(event){
+    console.log('onCitySelect > ',event)
+  }
 </script>
 
 <style scoped>
@@ -31,5 +37,12 @@ const cards = [
 .controls {
   background-color: aquamarine;
   padding: 15px;
+}
+button{
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 5px ;
+    cursor: pointer;
+    border-style: none;
 }
 </style>
