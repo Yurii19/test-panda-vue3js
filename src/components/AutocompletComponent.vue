@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="box">
-    <label for="city">Start typing to find city</label>
+    <div class="controls">
+      <label for="city">Start typing to find city</label><span @click="clearInput()">&#10006;</span>
+    </div>
+
     <input
       id="city"
       type="text"
@@ -8,7 +11,6 @@
       @input="inputHandle()"
       ref="searchCity"
     />
-    <!-- <button @click="getWeather()">add city</button> -->
 
     <div class="select">
       <ul>
@@ -27,11 +29,8 @@
 </template>
 
 <script setup>
-import { ref, watch, defineEmits, onMounted } from "vue";
-import { getWeatherAtCity } from "../services/services";
-import { APP_ID, API_URL } from "../variables";
+import { ref, defineEmits, onMounted } from "vue";
 import cityData from "../assets/city.list.json";
-// import { json } from "body-parser";
 
 let cityModel = ref("");
 const cities = ref([{ name: "Kyiv", id: 0 }]);
@@ -40,20 +39,7 @@ const matchedCities = ref([]);
 const emit = defineEmits(["selectCity"]);
 
 onMounted(() => {
-  console.log("onMounted > ", cityData[0]);
   cities.value = cityData;
-  // fetch('/city.list.json')
-  //.then(d => console.log(d.json()))
-  // .then(r => r.blob())
-  // .then(bl =>{
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     const data = JSON.parse(reader.result);
-  //     // do something with the data
-  //     console.log(data)
-  //   };
-  //   reader.readAsText(bl)
-  // })
 });
 
 function selectCity(event) {
@@ -70,49 +56,53 @@ function inputHandle() {
     return;
   }
   matchedCities.value = cities.value.filter((el) => {
-    const patern = `/${cityModel.value.toLowerCase()}/`;
-    const pat = new RegExp('^'+ cityModel.value.toLowerCase())
-    return el.name.toLocaleLowerCase().match(pat);
+    const patern = new RegExp("^" + cityModel.value.toLowerCase());
+    return el.name.toLocaleLowerCase().match(patern);
   });
+}
+
+function clearInput(){
+  cityModel.value = ''
+  matchedCities.value = ''
 }
 </script>
 
 <style scoped>
+/* bg-color: #f5f6fa */
 .box {
   padding: 10px 0 0 0;
-  border: 1px dotted red;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   width: 300px;
   position: relative;
-  /* margin-bottom: 10px; */
-  background-color: #dcdde1;
+  background-color: #dfe6e9;
 }
 .list-item:hover {
   cursor: pointer;
   background-color: #82ccdd;
 }
 
-.select {
-  background-color: #dcdde1;
+.controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px 0 15px;
+}
+.controls > span {
+  cursor: pointer;
 }
 .select > ul {
-  /* border: 1px solid blue; */
   text-align: start;
   position: absolute;
   width: 300px;
-  background-color: #dcdde1;
+  background-color: #dfe6e9;
   margin: 0;
   padding: 10px 0 0 0;
   max-height: 50vh;
-  overflow-y: scroll;
-  /* top: 0;
-  right: 0; */
-  /* background-color: greenyellow; */
+  overflow-y: auto;
 }
 .select > ul > li {
   list-style-type: none;
-  /* background-color: aquamarine; */
   margin: 0;
-  /* padding: 0 0 0 10px; */
   padding: 10px 10px 10px 15px;
 }
 input {
@@ -120,8 +110,8 @@ input {
   padding: 5px;
   border-radius: 5px;
   outline: none;
-  border: 1px solid black;
   font-size: 1em;
   width: 90%;
+  border-style: none;
 }
 </style>
