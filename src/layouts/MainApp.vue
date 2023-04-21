@@ -12,7 +12,9 @@
         @showChart="onShowChart($event)"
       />
     </div>
-    <ChartComponent />
+    <div class="chart" v-if="chartVisible">
+      <ChartComponent :labels="chartLabels" :data="chartData" />
+    </div>
   </div>
 </template>
 
@@ -33,6 +35,9 @@ import {
 //import e from "express";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
 const cards = ref([]);
+const chartVisible = ref(false);
+let chartLabels = ref(["ababa", "galamaga"]);
+let chartData = ref([10, 15]);
 
 onMounted(() => {
   const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
@@ -43,17 +48,29 @@ onMounted(() => {
     })
     .catch(() => (cards.value = [initialCard]));
 });
+
 //#########################################//
-function onShowChart(event) {
-  console.log(event);
+function onShowChart(cords) {
+  console.log(cords);
+  chartVisible.value = !chartVisible.value;
   // const today = new Date();
   // const now = today.getTime();
   // today.setHours(0, 0, 0, 0);
   // const start = today.getTime();
   // getHourlyWeather('Kyiv', start, now).then(d =>d.json()).then(r => console.log(r))
-  getWeatherData(event.lat, event.lon)
-    .then((d) => d.json())
-    .then((r) => console.log(r));
+  getWeatherData(cords.lat, cords.lon)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const src = data.hourly;
+      console.log(src);
+      const date = new Date();
+      const labels = src.map((el) => new Date(el.dt * 1000).getHours());
+      const tempearature = src.map((el) => el.temp);
+      chartLabels = labels;
+      chartData.value = tempearature;
+      console.log(labels);
+    });
 }
 
 function addFavorite() {

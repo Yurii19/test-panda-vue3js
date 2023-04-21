@@ -29,13 +29,30 @@ ChartJS.register(
   Legend
 );
 
+const props = defineProps({
+  labels: {
+    type: Array,
+    default: () => [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+    ],
+  },
+  data: { type: Array, default: () =>  [40, 39, 10, 40, 39, 80, 40] },
+});
+
 const chartData = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: props.labels,
   datasets: [
     {
-      label: "Data One",
-      backgroundColor: "#f87979",
-      data: [40, 39, 10, 40, 39, 80, 40],
+      label: "Temperature",
+      backgroundColor: "#fbc531",
+      borderColor: "#273c75",
+      data: props.data,
     },
   ],
 };
