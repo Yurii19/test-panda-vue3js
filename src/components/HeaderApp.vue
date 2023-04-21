@@ -21,7 +21,7 @@ export default {};
 
 <style scoped>
 .header {
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
 }
 .nav-list {
   display: flex;
@@ -36,5 +36,8 @@ export default {};
   /* border: 1px solid blue; */
   text-decoration: none;
   font-size: 1.2em;
+}
+.router-link-active, .router-link-exact-active {
+  border-bottom: 2px solid blue;
 }
 </style>

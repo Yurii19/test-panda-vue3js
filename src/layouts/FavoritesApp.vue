@@ -47,6 +47,8 @@ let chartData = ref({
 });
 
 onMounted(() => {
+  const favorits = JSON.parse(window.localStorage.getItem("favorits"));
+  cards.value = favorits
   // const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
   // getWeatherAtCity(url)
   //   .then((resp) => resp.json())
