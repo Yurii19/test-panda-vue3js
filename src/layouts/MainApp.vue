@@ -12,16 +12,17 @@
         @showChart="onShowChart($event)"
       />
     </div>
-    <!-- <WeatherCard :params="cards[0]" /> -->
+    <ChartComponent />
   </div>
 </template>
 
 <script setup>
 import AutocompletComponent from "@/components/AutocompletComponent.vue";
+import ChartComponent from "@/components/ChartComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
 // import { getLocations } from "@/services/services";
 import { onMounted, ref } from "vue";
-import { APP_ID, API_URL } from "@/variables";
+import { APP_ID, API_URL, initialCard } from "@/variables";
 import {
   getWeatherAtCity,
   // getHourlyWeather,
@@ -31,20 +32,7 @@ import {
 } from "@/services/services";
 //import e from "express";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
-const cards = ref([
-  {
-    id: 0,
-    city_name: "...",
-    feels_like: "...",
-    humidity: "...",
-    pressure: "...",
-    temp: "...",
-    temp_max: "...",
-    temp_min: "...",
-    lat: 0,
-    lon: 0,
-  },
-]);
+const cards = ref([]);
 
 onMounted(() => {
   const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
@@ -52,7 +40,8 @@ onMounted(() => {
     .then((resp) => resp.json())
     .then((data) => {
       cards.value = [createCard(data)];
-    });
+    })
+    .catch(() => (cards.value = [initialCard]));
 });
 //#########################################//
 function onShowChart(event) {
