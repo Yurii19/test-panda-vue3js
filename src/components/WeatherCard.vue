@@ -34,8 +34,8 @@
     </ul>
     <div class="controls">
       <span class="icon-container" @click="addToFavorite(params.city_name)"
-        ><FavoriteIcon :color="params.isFavorite? `red`: ``"  />
-        </span>
+        ><FavoriteIcon :color="params.isFavorite ? `red` : ``" />
+      </span>
       <span class="icon-container" @click="removeCard()"> <DeleteIcon /></span>
       <span class="icon-container" @click="showChart()"><ChartIcon /></span>
     </div>
@@ -75,7 +75,10 @@ function addToFavorite() {
   emit("addToFavorit", props.params.id);
 }
 function removeCard() {
-  emit("deleteCard", props.params.city_name);
+  emit("deleteCard", {
+    cityName: props.params.city_name,
+    cityId: props.params.id,
+  });
 }
 function showChart() {
   emit("showChart", {

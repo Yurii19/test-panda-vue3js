@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="main">
-   
     <div class="cards" v-for="card in cards" :key="card.city_name">
       <WeatherCard
         :params="card"
@@ -16,21 +15,10 @@
 </template>
 
 <script setup>
-import AutocompletComponent from "@/components/AutocompletComponent.vue";
 import ChartComponent from "@/components/ChartComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
-// import { getLocations } from "@/services/services";
 import { onMounted, ref } from "vue";
-import { APP_ID, API_URL, initialCard } from "@/variables";
-import {
-  getWeatherAtCity,
-  // getHourlyWeather,
-  // getStatistic,
-  // getHistory,
-  getWeatherData,
-} from "@/services/services";
-//import e from "express";
-//const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
+import { removeFromFavorites, getWeatherData } from "@/services/services";
 const cards = ref([]);
 const chartVisible = ref(false);
 
@@ -48,14 +36,7 @@ let chartData = ref({
 
 onMounted(() => {
   const favorits = JSON.parse(window.localStorage.getItem("favorits"));
-  cards.value = favorits
-  // const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
-  // getWeatherAtCity(url)
-  //   .then((resp) => resp.json())
-  //   .then((data) => {
-  //     cards.value = [createCard(data)];
-  //   })
-  //   .catch(() => (cards.value = [initialCard]));
+  cards.value = favorits;
 });
 
 //#########################################//
@@ -66,7 +47,6 @@ function onShowChart(params) {
     .then((data) => {
       chartData.value = null;
       const src = data.hourly;
-      // const date = new Date();
       const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
       const tempearature = src.map((el) => Math.round(el.temp));
       const newData = {
@@ -80,71 +60,23 @@ function onShowChart(params) {
           },
         ],
       };
-      // chartData.value.labels = labels;
-      // chartData.value.datasets.data = tempearature;
       newData.labels = labels;
       newData.datasets[0].data = tempearature;
       newData.datasets[0].label = params.cityName;
       chartData.value = newData;
-      // console.log(chartData.value);
     });
 }
 
-// function addFavorite() {
-//   // console.log("addFavorite");
-//   // getLocations().then((r) => console.log("getLocations> ", r));
-// }
+function onToFavorite(cityId) {
+  removeFromFavorites(cityId);
+  const favorits = JSON.parse(window.localStorage.getItem("favorits"));
+  cards.value = favorits;
+}
 
-// function onCitySelect(event) {
-//   // console.log("onCitySelect > ", event);
-//   getWeather(event.cityName);
-// }
-
-// function getWeather(cityName) {
-//   //const cityName = "London";
-//   if (cards.value.length === 5) {
-//     alert(
-//       "To add a new city, remove one, the maximum allowed number of selected cities is 5."
-//     );
-//     return;
-//   }
-//   //console.log('number of cards',cards.value.length)
-//   const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
-//   getWeatherAtCity(url)
-//     .then((resp) => resp.json())
-//     .then((data) => {
-//       console.log(data);
-//       cards.value = [...cards.value, createCard(data)];
-//       // console.log(" -- ", cards.value);
-//     });
-// }
-
-// function createCard(cityData) {
-//   return {
-//     id: cityData.id,
-//     city_name: cityData.name,
-//     feels_like: cityData.main.feels_like,
-//     humidity: cityData.main.humidity,
-//     pressure: cityData.main.pressure,
-//     temp: cityData.main.temp,
-//     temp_max: cityData.main.temp_max,
-//     temp_min: cityData.main.temp_min,
-//     lat: cityData.coord.lat,
-//     lon: cityData.coord.lon,
-//   };
-// }
-
-// function onToFavorite(data) {
-//   console.log("onToFavorite-> ", data);
-// }
-
-function onDeleteCard(data) {
-  chartVisible.value = false;
-  const confirmDelete = window.confirm("Really wanna delete " + data);
-  if (!confirmDelete) {
-    return;
-  }
-  cards.value = cards.value.filter((el) => el.city_name !== data);
+function onDeleteCard(params) {
+  removeFromFavorites(params.cityId);
+  const favorits = JSON.parse(window.localStorage.getItem("favorits"));
+  cards.value = favorits;
 }
 </script>
 

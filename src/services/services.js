@@ -12,9 +12,7 @@ export const getWeatherData = (lat, lon) => {
 
 export const addToFavorits = (card) => {
   const favorits = window.localStorage.favorits;
-  // console.log('favorits', favorits)
   if (favorits === undefined) {
-    // console.log("There are no favorits yet !");
     window.localStorage.setItem("favorits", JSON.stringify([card]));
     return;
   } else {
@@ -26,27 +24,26 @@ export const addToFavorits = (card) => {
       const newData = [...data, card];
       window.localStorage.setItem("favorits", JSON.stringify(newData));
     }
-    //  console.log("window.localStorage ", data);
   }
-  // console.log(window.localStorage);
 };
 
 export const checkIfFavorite = (id) => {
   const favorits = JSON.parse(window.localStorage.getItem("favorits"));
-  console.log("Favorits before checking: ", favorits, "ID : ", id);
   if (!favorits) {
-    console.log("favorits is undefined");
     return false;
   }
-  //  const data =
-  // console.log(data);
   const match = favorits.find((el) => el.id === id);
-  console.log("checkIfFavorite", match);
   if (match) {
     return true;
   } else {
     return false;
   }
+};
+
+export const removeFromFavorites = (id) => {
+  const data = JSON.parse(window.localStorage.getItem("favorits"));
+  const newData = data.filter((el) => el.id !== id);
+  window.localStorage.setItem("favorits", JSON.stringify(newData));
 };
 
 export const createCard = (cityData) => {

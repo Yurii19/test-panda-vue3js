@@ -137,13 +137,13 @@ function getWeather(cityName) {
     });
 }
 
-function onDeleteCard(data) {
+function onDeleteCard(params) {
   chartVisible.value = false;
-  const confirmDelete = window.confirm("Really wanna delete " + data);
+  const confirmDelete = window.confirm("Really wanna delete " + params.cityName);
   if (!confirmDelete) {
     return;
   }
-  cards.value = cards.value.filter((el) => el.city_name !== data);
+  cards.value = cards.value.filter((el) => el.id !== params.cityId);
 }
 </script>
 
