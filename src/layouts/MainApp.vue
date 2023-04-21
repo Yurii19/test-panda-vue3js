@@ -91,16 +91,17 @@ function onShowChart(params) {
 }
 //#########################################//
 function onToFavorite(cityId) {
-  console.log("onToFavorite- ", cityId);
-  const target = cards.value.find((el) => el.id === cityId);
+  //console.log("onToFavorite- ", cityId);
+  const target = { ...cards.value.find((el) => el.id === cityId) };
+ // console.log("TARGET ", target);
   const alreadyFavorite = checkIfFavorite(cityId);
-  console.log("alreadyFavorite ", alreadyFavorite);
+ // console.log("alreadyFavorite ", alreadyFavorite);
   if (alreadyFavorite) {
     alert(`The city ${target.city_name} is already favorite`);
     return;
   }
-  addToFavorits( target);
-  console.log(target);
+  addToFavorits(target);
+  //console.log(target);
 }
 
 // function addFavorite(event) {
