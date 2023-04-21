@@ -33,21 +33,29 @@
       </li>
     </ul>
     <div class="controls">
-      <span class="icon-container" @click="addToFavorite()"><FavoriteIcon /></span>
-      <span class="icon-container"> <DeleteIcon /></span>
-      <span class="icon-container"><ChartIcon /></span>
+      <span class="icon-container" @click="addToFavorite(params.city_name)"
+        ><FavoriteIcon
+      /></span>
+      <span class="icon-container" @click="removeCard()"> <DeleteIcon /></span>
+      <span class="icon-container" @click="showChart()"><ChartIcon /></span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, onMounted } from "vue";
 import FavoriteIcon from "@/icons/FavoriteIcon.vue";
 import DeleteIcon from "@/icons/DeleteIcon.vue";
 //import DeleteIcon from "@/icons/DeleteIcon.vue";
 import ChartIcon from "@/icons/ChartIcon.vue";
+
+// onMounted(() => {
+//   console.log(props.params)
+// });
+
 const props = defineProps({
   params: {
+    id: Number,
     city_name: String,
     feels_like: String,
     humidity: String,
@@ -55,12 +63,20 @@ const props = defineProps({
     temp: String,
     temp_max: String,
     temp_min: String,
+    lat: Number,
+    lon: Number,
   },
 });
 const emit = defineEmits(["deleteCard", "addToFavorit", "showChart"]);
 
-function addToFavorite(){
-  emit('addToFavorit', { cityName: props.city_name })
+function addToFavorite() {
+  emit("addToFavorit", props.params.city_name);
+}
+function removeCard() {
+  emit("deleteCard", props.params.city_name);
+}
+function showChart() {
+  emit("showChart", { lat: props.params.lat, lon: props.params.lon });
 }
 </script>
 

@@ -5,7 +5,12 @@
       <button @click="addFavorite()">Add to favorite</button>
     </section>
     <div class="cards" v-for="card in cards" :key="card.city_name">
-      <WeatherCard :params="card" @addToFavorit="onToFavorite()"/>
+      <WeatherCard
+        :params="card"
+        @addToFavorit="onToFavorite($event)"
+        @deleteCard="onDeleteCard($event)"
+        @showChart="onShowChart($event)"
+      />
     </div>
     <!-- <WeatherCard :params="cards[0]" /> -->
   </div>
@@ -14,47 +19,86 @@
 <script setup>
 import AutocompletComponent from "@/components/AutocompletComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
-import { getLocations } from "@/services/services";
-import { ref } from "vue";
+// import { getLocations } from "@/services/services";
+import { onMounted, ref } from "vue";
 import { APP_ID, API_URL } from "@/variables";
-import { getWeatherAtCity } from "@/services/services";
+import {
+  getWeatherAtCity,
+  // getHourlyWeather,
+  // getStatistic,
+  // getHistory,
+  getWeatherData,
+} from "@/services/services";
+//import e from "express";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
 const cards = ref([
   {
-    city_name: "London",
-    feels_like: "10.95",
-    humidity: "50",
-    pressure: "1023",
-    temp: "12.35",
-    temp_max: "13.43",
-    temp_min: "10.95",
+    id: 0,
+    city_name: "...",
+    feels_like: "...",
+    humidity: "...",
+    pressure: "...",
+    temp: "...",
+    temp_max: "...",
+    temp_min: "...",
+    lat: 0,
+    lon: 0,
   },
 ]);
 
+onMounted(() => {
+  const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
+  getWeatherAtCity(url)
+    .then((resp) => resp.json())
+    .then((data) => {
+      cards.value = [createCard(data)];
+    });
+});
+//#########################################//
+function onShowChart(event) {
+  console.log(event);
+  // const today = new Date();
+  // const now = today.getTime();
+  // today.setHours(0, 0, 0, 0);
+  // const start = today.getTime();
+  // getHourlyWeather('Kyiv', start, now).then(d =>d.json()).then(r => console.log(r))
+  getWeatherData(event.lat, event.lon)
+    .then((d) => d.json())
+    .then((r) => console.log(r));
+}
+
 function addFavorite() {
-  console.log("addFavorite");
-  getLocations().then((r) => console.log("getLocations> ", r));
+  // console.log("addFavorite");
+  // getLocations().then((r) => console.log("getLocations> ", r));
 }
 
 function onCitySelect(event) {
-  console.log("onCitySelect > ", event);
+  // console.log("onCitySelect > ", event);
   getWeather(event.cityName);
 }
 
 function getWeather(cityName) {
   //const cityName = "London";
+  if (cards.value.length === 5) {
+    alert(
+      "To add a new city, remove one, the maximum allowed number of selected cities is 5."
+    );
+    return;
+  }
+  //console.log('number of cards',cards.value.length)
   const url = `${API_URL}?q=${cityName}&appid=${APP_ID}&units=metric`;
   getWeatherAtCity(url)
     .then((resp) => resp.json())
     .then((data) => {
       console.log(data);
       cards.value = [...cards.value, createCard(data)];
-      console.log(" ---> ", cards.value);
+      // console.log(" ---> ", cards.value);
     });
 }
 
 function createCard(cityData) {
   return {
+    id: cityData.id,
     city_name: cityData.name,
     feels_like: cityData.main.feels_like,
     humidity: cityData.main.humidity,
@@ -62,17 +106,31 @@ function createCard(cityData) {
     temp: cityData.main.temp,
     temp_max: cityData.main.temp_max,
     temp_min: cityData.main.temp_min,
+    lat: cityData.coord.lat,
+    lon: cityData.coord.lon,
   };
 }
 
-function onToFavorite(data){
-  console.log(data)
+function onToFavorite(data) {
+  console.log("onToFavorite-> ", data);
 }
+
+function onDeleteCard(data) {
+  //console.log("onDeleteCard-> ", data);
+  const confirmDelete = window.confirm("Really wanna delete " + data);
+  if (!confirmDelete) {
+    return;
+  }
+  cards.value = cards.value.filter((el) => el.city_name !== data);
+}
+// function onShowChart(data) {
+//   console.log("onShowChart-> ", data);
+// }
 </script>
 
 <style scoped>
 .cards {
- display: inline-block;
+  display: inline-block;
 }
 .main {
   padding: 20px 20px 20px 20px;
