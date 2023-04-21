@@ -23,7 +23,7 @@ export const addToFavorits = (card) => {
       alert("No more favorite avalable");
       return;
     } else {
-     const newData = [...data, card];
+      const newData = [...data, card];
       window.localStorage.setItem("favorits", JSON.stringify(newData));
     }
     //  console.log("window.localStorage ", data);
@@ -33,13 +33,13 @@ export const addToFavorits = (card) => {
 
 export const checkIfFavorite = (id) => {
   const favorits = JSON.parse(window.localStorage.getItem("favorits"));
-  console.log("Favorits before checking: ", favorits, 'ID : ',id);
+  console.log("Favorits before checking: ", favorits, "ID : ", id);
   if (!favorits) {
     console.log("favorits is undefined");
     return false;
   }
-//  const data = 
- // console.log(data);
+  //  const data =
+  // console.log(data);
   const match = favorits.find((el) => el.id === id);
   console.log("checkIfFavorite", match);
   if (match) {
@@ -47,4 +47,20 @@ export const checkIfFavorite = (id) => {
   } else {
     return false;
   }
+};
+
+export const createCard = (cityData) => {
+  return {
+    id: cityData.id,
+    isFavorite: checkIfFavorite(cityData.id),
+    city_name: cityData.name,
+    feels_like: cityData.main.feels_like,
+    humidity: cityData.main.humidity,
+    pressure: cityData.main.pressure,
+    temp: cityData.main.temp,
+    temp_max: cityData.main.temp_max,
+    temp_min: cityData.main.temp_min,
+    lat: cityData.coord.lat,
+    lon: cityData.coord.lon,
+  };
 };

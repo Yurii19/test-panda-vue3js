@@ -6,7 +6,6 @@
     </section>
     <div class="cards" v-for="card in cards" :key="card.city_name">
       <WeatherCard
-        :isFavorite="checkIfFavorite(card)"
         :params="card"
         @addToFavorit="onToFavorite($event)"
         @deleteCard="onDeleteCard($event)"
@@ -31,6 +30,7 @@ import {
   addToFavorits,
   getWeatherData,
   checkIfFavorite,
+  createCard,
 } from "@/services/services";
 //import e from "express";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
@@ -92,15 +92,19 @@ function onShowChart(params) {
 //#########################################//
 function onToFavorite(cityId) {
   //console.log("onToFavorite- ", cityId);
-  const target = { ...cards.value.find((el) => el.id === cityId) };
- // console.log("TARGET ", target);
+  const target = cards.value.find((el) => el.id === cityId);
+  target.isFavorite = true;
+  console.log('target : ', target)
+  const newFavorit = { ...target };
+  // console.log("TARGET ", target);
   const alreadyFavorite = checkIfFavorite(cityId);
- // console.log("alreadyFavorite ", alreadyFavorite);
+  // console.log("alreadyFavorite ", alreadyFavorite);
   if (alreadyFavorite) {
-    alert(`The city ${target.city_name} is already favorite`);
+    alert(`The city ${newFavorit.city_name} is already favorite`);
     return;
   }
-  addToFavorits(target);
+  addToFavorits(newFavorit);
+
   //console.log(target);
 }
 
@@ -131,21 +135,6 @@ function getWeather(cityName) {
       cards.value = [...cards.value, createCard(data)];
       // console.log(" -- ", cards.value);
     });
-}
-
-function createCard(cityData) {
-  return {
-    id: cityData.id,
-    city_name: cityData.name,
-    feels_like: cityData.main.feels_like,
-    humidity: cityData.main.humidity,
-    pressure: cityData.main.pressure,
-    temp: cityData.main.temp,
-    temp_max: cityData.main.temp_max,
-    temp_min: cityData.main.temp_min,
-    lat: cityData.coord.lat,
-    lon: cityData.coord.lon,
-  };
 }
 
 function onDeleteCard(data) {

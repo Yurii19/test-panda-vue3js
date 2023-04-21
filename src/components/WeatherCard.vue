@@ -34,7 +34,7 @@
     </ul>
     <div class="controls">
       <span class="icon-container" @click="addToFavorite(params.city_name)"
-        ><FavoriteIcon :color="props.isFavorite? `red`: ``"  />
+        ><FavoriteIcon :color="params.isFavorite? `red`: ``"  />
         </span>
       <span class="icon-container" @click="removeCard()"> <DeleteIcon /></span>
       <span class="icon-container" @click="showChart()"><ChartIcon /></span>
@@ -57,6 +57,7 @@ const props = defineProps({
   isFavorite: { type: Boolean, default: () => false },
   params: {
     id: Number,
+    isFavorite: Boolean,
     city_name: String,
     feels_like: String,
     humidity: String,
