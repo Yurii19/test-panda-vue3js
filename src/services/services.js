@@ -1,27 +1,43 @@
 import { APP_ID } from "@/variables";
 
-// export const getHourlyWeather = (cityName, start, end) => {
-//   return fetch(
-//     `https://history.openweathermap.org/data/2.5/history/city?q=${cityName}&type=hour&start=${start}&end=${end}&appid=${APP_ID}`
-//   );
-// };
-
 export const getWeatherAtCity = (url) => {
   return fetch(url);
 };
 
-// export const getStatistic = (url) => {
-//   return fetch(
-//     `https://history.openweathermap.org/data/2.5/aggregated/day?q=London,GB&month=2&day=1&appid=${APP_ID}`
-//   );
-// };
-// export const getHistory = (url) => {
-//   return fetch(
-//     `https://history.openweathermap.org/data/3.0/history/timemachine?lat=51.51&lon=-0.13&dt=606348800&appid=${APP_ID}`
-//   );
-// };
 export const getWeatherData = (lat, lon) => {
   return fetch(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=daily,minutely,current,alerts&units=metric&appid=${APP_ID}`
   );
+};
+
+export const addToFavorits = (card) => {
+  if (!window.localStorage.favorits) {
+    console.log("There are no favorits yet !");
+    window.localStorage.setItem("favorits", JSON.stringify([card]));
+  } else {
+    let data = JSON.parse(window.localStorage.getItem("favorits"));
+    if (data.length === 5) {
+      alert("No more favorite avalable");
+      return;
+    } else {
+      data = [...data, card];
+      window.localStorage.setItem("favorits", JSON.stringify([card]));
+    }
+    console.log("window.localStorage ", data);
+  }
+  // console.log(window.localStorage);
+};
+
+export const checkIfFavorite = (id) => {
+  if (!window.localStorage.favorits) {
+    return false;
+  }
+  const data = JSON.parse(window.localStorage.getItem("favorits"));
+  const match = data.includes((el) => el.id === id);
+  console.log('checkIfFavorite', match)
+  if (match) {
+    return true;
+  } else {
+    return false;
+  }
 };

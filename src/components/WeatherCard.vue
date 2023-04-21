@@ -34,8 +34,8 @@
     </ul>
     <div class="controls">
       <span class="icon-container" @click="addToFavorite(params.city_name)"
-        ><FavoriteIcon
-      /></span>
+        ><FavoriteIcon :color="props.isFavorite? `red`: ``"  />
+        </span>
       <span class="icon-container" @click="removeCard()"> <DeleteIcon /></span>
       <span class="icon-container" @click="showChart()"><ChartIcon /></span>
     </div>
@@ -54,6 +54,7 @@ import ChartIcon from "@/icons/ChartIcon.vue";
 // });
 
 const props = defineProps({
+  isFavorite: { type: Boolean, default: () => false },
   params: {
     id: Number,
     city_name: String,
@@ -70,13 +71,17 @@ const props = defineProps({
 const emit = defineEmits(["deleteCard", "addToFavorit", "showChart"]);
 
 function addToFavorite() {
-  emit("addToFavorit", props.params.city_name);
+  emit("addToFavorit", props.params.id);
 }
 function removeCard() {
   emit("deleteCard", props.params.city_name);
 }
 function showChart() {
-  emit("showChart", { lat: props.params.lat, lon: props.params.lon });
+  emit("showChart", {
+    lat: props.params.lat,
+    lon: props.params.lon,
+    cityName: props.params.city_name,
+  });
 }
 </script>
 

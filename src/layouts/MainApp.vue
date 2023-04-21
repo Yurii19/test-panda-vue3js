@@ -6,6 +6,7 @@
     </section>
     <div class="cards" v-for="card in cards" :key="card.city_name">
       <WeatherCard
+        :isFavorite="checkIfFavorite(card)"
         :params="card"
         @addToFavorit="onToFavorite($event)"
         @deleteCard="onDeleteCard($event)"
@@ -13,7 +14,7 @@
       />
     </div>
     <div class="chart" v-if="chartVisible">
-      <ChartComponent :labels="chartLabels" :data="chartData" />
+      <ChartComponent :data="chartData" />
     </div>
   </div>
 </template>
@@ -27,17 +28,26 @@ import { onMounted, ref } from "vue";
 import { APP_ID, API_URL, initialCard } from "@/variables";
 import {
   getWeatherAtCity,
-  // getHourlyWeather,
-  // getStatistic,
-  // getHistory,
+  addToFavorits,
   getWeatherData,
+  checkIfFavorite,
 } from "@/services/services";
 //import e from "express";
 //const cities = ["Kyiv", "Warszaw", "Berlin", "Paris"];
 const cards = ref([]);
 const chartVisible = ref(false);
-let chartLabels = ref(["ababa", "galamaga"]);
-let chartData = ref([10, 15]);
+
+let chartData = ref({
+  labels: ["January", "February", "March", "January", "February", "March"],
+  datasets: [
+    {
+      label: "Temperature",
+      backgroundColor: "#fbc531",
+      borderColor: "#273c75",
+      data: [40, 20, 12, 40, 20, 12],
+    },
+  ],
+});
 
 onMounted(() => {
   const url = `${API_URL}?q=Kyiv&appid=${APP_ID}&units=metric`;
@@ -49,34 +59,54 @@ onMounted(() => {
     .catch(() => (cards.value = [initialCard]));
 });
 
-//#########################################//
-function onShowChart(cords) {
-  console.log(cords);
-  chartVisible.value = !chartVisible.value;
-  // const today = new Date();
-  // const now = today.getTime();
-  // today.setHours(0, 0, 0, 0);
-  // const start = today.getTime();
-  // getHourlyWeather('Kyiv', start, now).then(d =>d.json()).then(r => console.log(r))
-  getWeatherData(cords.lat, cords.lon)
+function onShowChart(params) {
+  chartVisible.value = true;
+  getWeatherData(params.lat, params.lon)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      chartData.value = null;
       const src = data.hourly;
-      console.log(src);
-      const date = new Date();
-      const labels = src.map((el) => new Date(el.dt * 1000).getHours());
-      const tempearature = src.map((el) => el.temp);
-      chartLabels = labels;
-      chartData.value = tempearature;
-      console.log(labels);
+      // const date = new Date();
+      const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
+      const tempearature = src.map((el) => Math.round(el.temp));
+      const newData = {
+        labels: [],
+        datasets: [
+          {
+            label: "City name ",
+            backgroundColor: "#32ff7e",
+            borderColor: "blue",
+            data: [],
+          },
+        ],
+      };
+      // chartData.value.labels = labels;
+      // chartData.value.datasets.data = tempearature;
+      newData.labels = labels;
+      newData.datasets[0].data = tempearature;
+      newData.datasets[0].label = params.cityName;
+      chartData.value = newData;
+      // console.log(chartData.value);
     });
 }
-
-function addFavorite() {
-  // console.log("addFavorite");
-  // getLocations().then((r) => console.log("getLocations> ", r));
+//#########################################//
+function onToFavorite(cityId) {
+  console.log("onToFavorite- ", cityId);
+  const target = cards.value.find((el) => el.id === cityId);
+  const alreadyFavorite = checkIfFavorite(cityId);
+  console.log("alreadyFavorite ", alreadyFavorite);
+  if (alreadyFavorite) {
+    alert(`The city ${target.city_name} is already favorite`);
+    return;
+  }
+  addToFavorits( target);
+  console.log(target);
 }
+
+// function addFavorite(event) {
+//   console.log(event)
+//  //addToFavorits(card)
+// }
 
 function onCitySelect(event) {
   // console.log("onCitySelect > ", event);
@@ -98,7 +128,7 @@ function getWeather(cityName) {
     .then((data) => {
       console.log(data);
       cards.value = [...cards.value, createCard(data)];
-      // console.log(" ---> ", cards.value);
+      // console.log(" -- ", cards.value);
     });
 }
 
@@ -117,21 +147,14 @@ function createCard(cityData) {
   };
 }
 
-function onToFavorite(data) {
-  console.log("onToFavorite-> ", data);
-}
-
 function onDeleteCard(data) {
-  //console.log("onDeleteCard-> ", data);
+  chartVisible.value = false;
   const confirmDelete = window.confirm("Really wanna delete " + data);
   if (!confirmDelete) {
     return;
   }
   cards.value = cards.value.filter((el) => el.city_name !== data);
 }
-// function onShowChart(data) {
-//   console.log("onShowChart-> ", data);
-// }
 </script>
 
 <style scoped>

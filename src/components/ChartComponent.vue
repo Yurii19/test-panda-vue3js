@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="chart">
-    <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+    <Line id="my-chart-id" :options="chartOptions" :data="data" />
   </div>
 </template>
 
@@ -30,19 +30,33 @@ ChartJS.register(
 );
 
 const props = defineProps({
-  labels: {
-    type: Array,
-    default: () => [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-    ],
+  data: {
+    type: Object,
+    default: () => ({
+      labels: ["January", "February", "March"],
+      datasets: [
+        {
+          label: "Temperature",
+          backgroundColor: "#fbc531",
+          borderColor: "#273c75",
+          data: [40, 20, 12],
+        },
+      ],
+    }),
   },
-  data: { type: Array, default: () =>  [40, 39, 10, 40, 39, 80, 40] },
+  //   labels: {
+  //     type: Array,
+  //     default: () => [
+  //       "January",
+  //       "February",
+  //       "March",
+  //       "April",
+  //       "May",
+  //       "June",
+  //       "July",
+  //     ],
+  //   },
+  //   data: { type: Array, default: () =>  [40, 39, 10, 40, 39, 80, 40] },
 });
 
 const chartData = {
