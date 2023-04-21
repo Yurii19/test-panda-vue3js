@@ -96,6 +96,7 @@ function showChart() {
   border-radius: 5px;
   box-shadow: 0 0 7px black;
   text-align: start;
+  margin: 10px;
 }
 .controls {
   display: flex;

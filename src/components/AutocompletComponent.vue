@@ -1,7 +1,8 @@
 <template lang="html">
   <div class="box">
     <div class="controls">
-      <label for="city">Start typing to find city</label><span @click="clearInput()">&#10006;</span>
+      <label for="city">Start typing to find city</label>
+      <span @click="clearInput()">&#10006;</span>
     </div>
 
     <input
@@ -50,19 +51,21 @@ function selectCity(event) {
 }
 
 function inputHandle() {
-  if (cityModel.value === "") {
+  const key = cityModel.value;
+  if (key === "" || key.length < 3) {
     matchedCities.value = [];
     return;
   }
+
   matchedCities.value = cities.value.filter((el) => {
     const patern = new RegExp("^" + cityModel.value.toLowerCase());
     return el.name.toLocaleLowerCase().match(patern);
   });
 }
 
-function clearInput(){
-  cityModel.value = ''
-  matchedCities.value = ''
+function clearInput() {
+  cityModel.value = "";
+  matchedCities.value = "";
 }
 </script>
 
@@ -85,6 +88,9 @@ function clearInput(){
   display: flex;
   justify-content: space-between;
   padding: 0 15px 0 15px;
+}
+.controls > label {
+  font-weight: 600;
 }
 .controls > span {
   cursor: pointer;

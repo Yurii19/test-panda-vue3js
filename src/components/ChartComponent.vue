@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="chart">
+    <h3>Hourly forecast of temperature in {{ data.datasets[0].label }} for next 24 hours</h3>
     <Line id="my-chart-id" :options="chartOptions" :data="data" />
   </div>
 </template>

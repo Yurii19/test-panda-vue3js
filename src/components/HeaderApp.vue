@@ -38,6 +38,6 @@ export default {};
   font-size: 1.2em;
 }
 .router-link-active, .router-link-exact-active {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
 }
 </style>
