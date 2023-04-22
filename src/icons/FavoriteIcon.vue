@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted } from "vue";
+import { defineProps } from "vue";
 
 const props = defineProps({
   color: { type: String, default: () => "black" },

@@ -46,12 +46,7 @@
 import { defineProps, defineEmits, onMounted } from "vue";
 import FavoriteIcon from "@/icons/FavoriteIcon.vue";
 import DeleteIcon from "@/icons/DeleteIcon.vue";
-//import DeleteIcon from "@/icons/DeleteIcon.vue";
 import ChartIcon from "@/icons/ChartIcon.vue";
-
-// onMounted(() => {
-//   console.log(props.params)
-// });
 
 const props = defineProps({
   isFavorite: { type: Boolean, default: () => false },

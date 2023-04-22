@@ -18,7 +18,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "vue-chartjs";
-// import * as chartConfig from "./chartConfig.js";
 
 ChartJS.register(
   CategoryScale,
@@ -45,19 +44,6 @@ const props = defineProps({
       ],
     }),
   },
-  //   labels: {
-  //     type: Array,
-  //     default: () => [
-  //       "January",
-  //       "February",
-  //       "March",
-  //       "April",
-  //       "May",
-  //       "June",
-  //       "July",
-  //     ],
-  //   },
-  //   data: { type: Array, default: () =>  [40, 39, 10, 40, 39, 80, 40] },
 });
 
 const chartData = {

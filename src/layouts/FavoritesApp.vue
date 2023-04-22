@@ -39,7 +39,6 @@ onMounted(() => {
   cards.value = favorits;
 });
 
-//#########################################//
 function onShowChart(params) {
   chartVisible.value = true;
   getWeatherData(params.lat, params.lon)
@@ -86,7 +85,6 @@ function onDeleteCard(params) {
 }
 .main {
   padding: 20px 20px 20px 20px;
-  /* background-color: bisque; */
 }
 .controls {
   background-color: aquamarine;
