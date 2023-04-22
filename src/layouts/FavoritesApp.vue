@@ -18,7 +18,10 @@
 import ChartComponent from "@/components/ChartComponent.vue";
 import WeatherCard from "@/components/WeatherCard.vue";
 import { onMounted, ref } from "vue";
-import { removeFromFavorites, getWeatherData } from "@/services/services";
+import {
+  removeFromFavorites,
+  createChartData,
+} from "@/services/services";
 const cards = ref([]);
 const chartVisible = ref(false);
 
@@ -41,29 +44,10 @@ onMounted(() => {
 
 function onShowChart(params) {
   chartVisible.value = true;
-  getWeatherData(params.lat, params.lon)
-    .then((response) => response.json())
-    .then((data) => {
-      chartData.value = null;
-      const src = data.hourly.slice(0,25);
-      const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
-      const tempearature = src.map((el) => Math.round(el.temp));
-      const newData = {
-        labels: [],
-        datasets: [
-          {
-            label: "City name ",
-            backgroundColor: "#32ff7e",
-            borderColor: "blue",
-            data: [],
-          },
-        ],
-      };
-      newData.labels = labels;
-      newData.datasets[0].data = tempearature;
-      newData.datasets[0].label = params.cityName;
-      chartData.value = newData;
-    });
+  createChartData(params).then((newData) => {
+    chartData.value = null;
+    chartData.value = newData;
+  });
 }
 
 function onToFavorite(cityId) {
@@ -85,19 +69,5 @@ function onDeleteCard(params) {
 }
 .main {
   padding: 20px 20px 20px 20px;
-}
-.controls {
-  background-color: aquamarine;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
-button {
-  padding: 10px;
-  font-size: 1.1em;
-  border-radius: 5px;
-  cursor: pointer;
-  border-style: none;
 }
 </style>

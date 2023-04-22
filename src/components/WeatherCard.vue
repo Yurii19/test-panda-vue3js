@@ -95,7 +95,6 @@ function showChart() {
 
 <style scoped>
 .header > span {
-  /* border: 1px solid black; */
   display: block;
   color: rgba(0, 0, 0, 0.5);
   font-weight: 600;

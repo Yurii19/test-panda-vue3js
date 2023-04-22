@@ -18,8 +18,6 @@ export default {};
 </script>
 
 <style scoped>
-.header {
-}
 .nav-list {
   display: flex;
   list-style-type: none;

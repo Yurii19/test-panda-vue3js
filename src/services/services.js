@@ -61,3 +61,29 @@ export const createCard = (cityData) => {
     lon: cityData.coord.lon,
   };
 };
+
+export const createChartData = (params) => {
+  return getWeatherData(params.lat, params.lon)
+    .then((response) => response.json())
+    .then((data) => {
+      const src = data.hourly.slice(0, 25);
+      const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
+      const tempearatures = src.map((el) => Math.round(el.temp));
+      const newData = {
+        labels: [],
+        datasets: [
+          {
+            label: "City name ",
+            backgroundColor: "#32ff7e",
+            borderColor: "blue",
+            data: [],
+          },
+        ],
+      };
+      newData.labels = labels;
+      newData.datasets[0].data = tempearatures;
+      newData.datasets[0].label = params.cityName;
+      return newData
+    })
+    .then((newData) => newData);
+};

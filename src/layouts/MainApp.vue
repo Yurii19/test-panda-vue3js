@@ -28,9 +28,9 @@ import { APP_ID, API_URL, initialCard } from "@/variables";
 import {
   getWeatherAtCity,
   addToFavorits,
-  getWeatherData,
   checkIfFavorite,
   createCard,
+  createChartData,
 } from "@/services/services";
 
 const cards = ref([]);
@@ -60,29 +60,10 @@ onMounted(() => {
 
 function onShowChart(params) {
   chartVisible.value = true;
-  getWeatherData(params.lat, params.lon)
-    .then((response) => response.json())
-    .then((data) => {
-      chartData.value = null;
-      const src = data.hourly.slice(0,25);
-      const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
-      const tempearatures = src.map((el) => Math.round(el.temp));
-      const newData = {
-        labels: [],
-        datasets: [
-          {
-            label: "City name ",
-            backgroundColor: "#32ff7e",
-            borderColor: "blue",
-            data: [],
-          },
-        ],
-      };
-      newData.labels = labels;
-      newData.datasets[0].data = tempearatures;
-      newData.datasets[0].label = params.cityName;
-      chartData.value = newData;
-    });
+  createChartData(params).then((newData) => {
+    chartData.value = null;
+    chartData.value = newData;
+  });
 }
 function onToFavorite(cityId) {
   const target = cards.value.find((el) => el.id === cityId);
@@ -128,7 +109,7 @@ function onDeleteCard(params) {
 </script>
 
 <style scoped>
-.cards-container{
+.cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

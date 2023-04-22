@@ -16,7 +16,6 @@ const router = createRouter({
       path: "/favorites",
       component: FavoritesApp,
     },
-    //   { path: '/login', name: 'Login', component: LoginPage },
   ],
 });
 
