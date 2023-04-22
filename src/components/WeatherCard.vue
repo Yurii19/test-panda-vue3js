@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="card">
-    <h3>City: {{ params.city_name }}</h3>
+    <div class="header">
+      <h3>City: {{ params.city_name }}</h3>
+      <span>{{ currentDate }}</span>
+    </div>
     <ul>
       <li>
         <span><b>Temperature:</b> </span
@@ -43,7 +46,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted } from "vue";
+import { defineProps, defineEmits, onMounted, computed } from "vue";
 import FavoriteIcon from "@/icons/FavoriteIcon.vue";
 import DeleteIcon from "@/icons/DeleteIcon.vue";
 import ChartIcon from "@/icons/ChartIcon.vue";
@@ -63,6 +66,12 @@ const props = defineProps({
     lat: Number,
     lon: Number,
   },
+});
+
+const currentDate = computed(() => {
+  const now = new Date() + "";
+  const data = now.slice(0, 21);
+  return data;
 });
 const emit = defineEmits(["deleteCard", "addToFavorit", "showChart"]);
 
@@ -85,6 +94,13 @@ function showChart() {
 </script>
 
 <style scoped>
+.header > span {
+  /* border: 1px solid black; */
+  display: block;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  text-align: end;
+}
 .card {
   width: 300px;
   padding: 10px 20px 10px 20px;

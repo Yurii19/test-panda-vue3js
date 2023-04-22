@@ -1,12 +1,14 @@
 <template lang="html">
   <div class="chart">
-    <h3>Hourly forecast of temperature in {{ data.datasets[0].label }} for next 24 hours</h3>
+    <h3>
+      {{ chartTitle }}
+    </h3>
     <Line id="my-chart-id" :options="chartOptions" :data="data" />
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted } from "vue";
+import { defineProps, computed } from "vue";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -46,17 +48,12 @@ const props = defineProps({
   },
 });
 
-const chartData = {
-  labels: props.labels,
-  datasets: [
-    {
-      label: "Temperature",
-      backgroundColor: "#fbc531",
-      borderColor: "#273c75",
-      data: props.data,
-    },
-  ],
-};
+const chartTitle = computed(() => {
+  const now = new Date() + "";
+  const data = now.slice(4, 21);
+  return `Hourly weather forecast for ${props.data.datasets[0].label} (${data}) for the next 24  hours`;
+});
+
 const chartOptions = {
   responsive: true,
 };

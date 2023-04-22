@@ -45,7 +45,7 @@ function onShowChart(params) {
     .then((response) => response.json())
     .then((data) => {
       chartData.value = null;
-      const src = data.hourly;
+      const src = data.hourly.slice(0,25);
       const labels = src.map((el) => new Date(el.dt * 1000).getHours() + "h");
       const tempearature = src.map((el) => Math.round(el.temp));
       const newData = {
