@@ -1,29 +1,32 @@
 <template>
-  <img alt="Vue logo" src="https://s.dou.ua/CACHE/images/img/static/companies/panda_logo/bfe851809828be6e25ca3574a2517c54.png">
- <MainApp />
+  <img
+    alt="Panda logo"
+    width="150"
+    src="https://s.dou.ua/CACHE/images/img/static/companies/panda_logo/bfe851809828be6e25ca3574a2517c54.png"
+  />
+  <HeaderApp />
+  <router-view></router-view>
+  
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-import MainApp from './layouts/MainApp.vue'
-//import HelloWorld from './layouts/MainApp.vue.vue'
+import HeaderApp from "./components/HeaderApp.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    // HelloWorld,
-    MainApp
-  }
-}
+    HeaderApp
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 60px; */
 }
 </style>

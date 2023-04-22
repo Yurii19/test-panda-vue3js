@@ -1,5 +1,24 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import "./assets/main.css"
+import { createApp } from "vue";
+import App from "./App.vue";
+import "./assets/main.css";
+import { createRouter, createWebHistory } from "vue-router";
+import MainApp from "./layouts/MainApp";
+import FavoritesApp from "./layouts/FavoritesApp";
 
-createApp(App).mount('#app')
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: "/",
+      component: MainApp,
+    },
+    {
+      path: "/favorites",
+      component: FavoritesApp,
+    },
+  ],
+});
+
+const app = createApp(App);
+app.use(router);
+app.mount("#app");
